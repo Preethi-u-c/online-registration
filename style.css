@@ -1,0 +1,118 @@
+/* ===== Base Styles ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f6f9;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 40px;
+  color: #333;
+}
+
+/* ===== Form Container ===== */
+.form-container {
+  background: #ffffff;
+  width: 95%;
+  max-width: 750px;
+  padding: 35px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Heading ===== */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* ===== Fieldsets ===== */
+fieldset {
+  border: 1px solid #dcdde1;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  background: #fafbfc;
+}
+
+legend {
+  font-weight: 600;
+  color: #0078D7;
+  font-size: 1.05em;
+  padding: 0 10px;
+}
+
+/* ===== Form Groups ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* ===== Inputs, Selects, Textareas ===== */
+input, select, textarea {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #0078D7;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 120, 215, 0.3);
+}
+
+/* ===== Textarea ===== */
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===== Button ===== */
+button {
+  background: #0078D7;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #005a9e;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+
+  .form-container {
+    padding: 25px 30px;
+  }
+
+  fieldset {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.4em;
+  }
+}
