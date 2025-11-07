@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     move_uploaded_file($_FILES["resume"]["tmp_name"], $target_file);
   }
 
-  // Collect form data (26 fields)
+  // Collect form data
   $first_name   = $_POST['first_name'];
   $last_name    = $_POST['last_name'];
   $dob          = $_POST['dob'];
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $hobbies      = $_POST['hobbies'];
   $comments     = $_POST['comments'];
 
-  // ✅ Insert into database
+  // Insert into database
   $sql = "INSERT INTO applicants (
     first_name, last_name, dob, gender, email, phone, alt_phone, nationality,
     address1, address2, city, state, country, pincode,
@@ -62,81 +62,96 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   );
 
   if ($stmt->execute()) {
+    // Get last inserted record ID
+    $last_id = $stmt->insert_id;
+
+    // Fetch the inserted record to display summary
+    $result = mysqli_query($conn, "SELECT * FROM applicants WHERE id = $last_id");
+    $row = mysqli_fetch_assoc($result);
+
     echo "<!DOCTYPE html><html lang='en'><head>
       <meta charset='UTF-8'>
       <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-      <title>Application Submitted</title>
+      <title>Registration Successful</title>
       <style>
         body {
-          font-family: Arial, sans-serif;
-          background: #f5f7fa;
-          color: #333;
+          font-family: 'Poppins', sans-serif;
+          background: #f4f6f9;
           margin: 0;
-          padding: 20px;
+          padding: 40px;
+          color: #333;
+        }
+        .container {
+          background: #fff;
+          max-width: 700px;
+          margin: auto;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          padding: 30px;
         }
         h2 {
-          color: #2e7d32;
           text-align: center;
+          color: #2e7d32;
+          margin-bottom: 20px;
         }
         table {
-          width: 70%;
-          margin: 30px auto;
+          width: 100%;
           border-collapse: collapse;
-          background: white;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          margin: 20px 0;
         }
         td {
-          padding: 10px 15px;
+          padding: 10px 12px;
           border-bottom: 1px solid #ddd;
         }
         tr:last-child td {
           border-bottom: none;
         }
         th {
-          background: #4caf50;
+          background: #2e7d32;
           color: white;
           text-align: left;
-          padding: 12px;
+          padding: 10px;
         }
-        a {
-          display: inline-block;
-          text-decoration: none;
-          margin: 20px auto;
+        .btn-container {
           text-align: center;
-          color: white;
-          background: #2196f3;
-          padding: 10px 20px;
-          border-radius: 5px;
+          margin-top: 20px;
         }
-        a:hover {
-          background: #0b7dda;
+        a.button {
+          background: #1a237e;
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          border-radius: 6px;
+          margin: 0 10px;
+          display: inline-block;
+        }
+        a.button:hover {
+          background: #3949ab;
         }
       </style>
     </head><body>";
 
-    echo "<h2>✅ Application Submitted Successfully!</h2>";
+    echo "<div class='container'>";
+    echo "<h2>✅ Registration Submitted Successfully!</h2>";
+
     echo "<table>";
-    echo "<tr><th colspan='2'>Submitted Details</th></tr>";
-    echo "<tr><td><b>Full Name:</b></td><td>$first_name $last_name</td></tr>";
-    echo "<tr><td><b>Date of Birth:</b></td><td>$dob</td></tr>";
-    echo "<tr><td><b>Gender:</b></td><td>$gender</td></tr>";
-    echo "<tr><td><b>Email:</b></td><td>$email</td></tr>";
-    echo "<tr><td><b>Phone:</b></td><td>$phone</td></tr>";
-    echo "<tr><td><b>Alternate Phone:</b></td><td>$alt_phone</td></tr>";
-    echo "<tr><td><b>Address:</b></td><td>$address1, $address2, $city, $state, $country - $pincode</td></tr>";
-    echo "<tr><td><b>Qualification:</b></td><td>$qualification</td></tr>";
-    echo "<tr><td><b>University:</b></td><td>$university</td></tr>";
-    echo "<tr><td><b>Passing Year:</b></td><td>$passing_year</td></tr>";
-    echo "<tr><td><b>Percentage:</b></td><td>$percentage%</td></tr>";
-    echo "<tr><td><b>Course:</b></td><td>$course ($mode - $timing)</td></tr>";
-    echo "<tr><td><b>Skills:</b></td><td>$skills</td></tr>";
-    echo "<tr><td><b>Experience:</b></td><td>$experience</td></tr>";
-    echo "<tr><td><b>Hobbies:</b></td><td>$hobbies</td></tr>";
-    echo "<tr><td><b>Comments:</b></td><td>$comments</td></tr>";
-    echo "<tr><td><b>Resume File:</b></td><td><a href='uploads/$resume_name' target='_blank'>$resume_name</a></td></tr>";
+    echo "<tr><th colspan='2'>Summary of Your Registration</th></tr>";
+    echo "<tr><td><b>Full Name:</b></td><td>{$row['first_name']} {$row['last_name']}</td></tr>";
+    echo "<tr><td><b>Email:</b></td><td>{$row['email']}</td></tr>";
+    echo "<tr><td><b>Phone:</b></td><td>{$row['phone']}</td></tr>";
+    echo "<tr><td><b>Course Applied:</b></td><td>{$row['course']} ({$row['mode']})</td></tr>";
+    echo "<tr><td><b>Skills:</b></td><td>{$row['skills']}</td></tr>";
+    echo "<tr><td><b>Qualification:</b></td><td>{$row['qualification']}</td></tr>";
+    echo "<tr><td><b>Resume:</b></td><td><a href='uploads/{$row['resume']}' target='_blank'>{$row['resume']}</a></td></tr>";
     echo "</table>";
-    echo "<div style='text-align:center;'><a href='index.php'>⬅ Go back to form</a></div>";
-    echo "</body></html>";
+
+    echo "<div class='btn-container'>
+            <a href='index.php' class='button'>➕ Add Another</a>
+            <a href='view.php' class='button'>📋 View All Registrations</a>
+          </div>";
+
+    echo "</div></body></html>";
+
   } else {
     echo "❌ Error: " . $stmt->error;
   }
